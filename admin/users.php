@@ -34,48 +34,44 @@ $pdo = getDB();
 </head>
 <body>
     <div class="dashboard-container">
-        <h1 class="text-center">Welcome Admin</h1>
+        <h1 class="text-center"> Admin</h1>
         <div class="text-center mt-4">
-            <a href="download_report.php" class="btn btn-warning">Download Task Report</a>
+            <a href="index.php" class="btn btn-primary">Dashboard</a>
             <a href="create_user.php" class="btn btn-success">Create User</a>
-            <a href="users.php" class="btn btn-primary">User list</a>
+            <a href="users.php" class="btn btn-secondary">User list</a>
             <a href="logout.php" class="btn btn-danger">Logout</a>
         </div>
     </div>
     <?php
-    $stmt = $pdo->prepare('
-        SELECT tasks.*, users.first_name, users.last_name, users.email
-        FROM tasks
-        JOIN users ON tasks.user_id = users.id
-    ');
+    $stmt = $pdo->prepare('SELECT * FROM users ');
     $stmt->execute();
-    $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     ?>
     
     <div class="container" style="background-color: aliceblue;">
-    <h2 class="text-center">Task List</h2>
+    <h2 class="text-center">Users List</h2>
         <table class="table">
             <thead class="thead-dark">
                 <tr>
                 <th scope="col">#</th>
                 <th scope="col">User Name</th>
-                <th scope="col">Start Time</th>
-                <th scope="col">End Time</th>
-                <th scope="col">Notes</th>
-                <th scope="col">Description</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col">Last login</th>
+                <th scope="col">Last Password Change</th>
                 </tr>
             </thead>
             <tbody>
                 <?php
-                if(isset($tasks) && count($tasks) > 0){
-                    foreach($tasks as $k => $task){ ?>
+                if(isset($users) && count($users) > 0){
+                    foreach($users as $k => $user){ ?>
                         <tr>
                             <td><?php echo $k+1; ?></td>
-                            <td><?php echo $task['first_name'] . ' ' . $task['last_name']. '('. $task['email'] .')'  ; ?></td>
-                            <td><?php echo date('d-M-Y H:i:s', strtotime($task['start_time'])) ; ?></td>
-                            <td><?php echo date('d-M-Y H:i:s', strtotime($task['stop_time'])) ; ?></td>
-                            <td><?php echo $task['notes']; ?></td>
-                            <td><?php echo $task['description']; ?></td>
+                            <td><?php echo $user['first_name'] . ' ' . $user['last_name']; ?></td>
+                            <td><?php echo $user['email']; ?></td>
+                            <td><?php echo $user['phone']; ?></td>
+                            <td><?php echo $user['last_login'] ? date('d-M-Y H:i:s', strtotime($user['last_login'])) : 'No last login date available' ; ?></td>
+                            <td><?php echo $user['last_password_change'] ? date('d-M-Y H:i:s', strtotime($user['last_password_change'])) : 'No last password change date available' ; ?></td>
                         </tr>
                 <?php }
                 }else{ ?>

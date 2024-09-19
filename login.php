@@ -7,16 +7,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // try{
+    try{
 
-        $stmt = $pdo->prepare('SELECT id, password, last_login, last_password_change, is_password_default FROM users WHERE email = :email AND password = :password');
-        $stmt->execute(['email' => $email, 'password' => md5($password)]);
+        $stmt = $pdo->prepare('SELECT id, password, last_login, last_password_change, is_password_default FROM users WHERE email = :email');
+        $stmt->execute(['email' => $email]);
 
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // password_verify(md5($password), $user['password']) // we can also use this 
-        if ($user) {
-            // Update last login
+        if ($user && password_verify($password, $user['password']) || md5($password) == $user['password'] ) {
+
             $updateStmt = $pdo->prepare('UPDATE users SET last_login = NOW() WHERE id = :id');
             $updateStmt->execute(['id' => $user['id']]);
 
@@ -40,9 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $error = 'Invalid username or password';
         }
 
-    // } catch (PDOException $e) {
-    //     echo 'Database error: ' . htmlspecialchars($e->getMessage());
-    // }
+    } catch (PDOException $e) {
+        echo 'Database error: ' . htmlspecialchars($e->getMessage());
+    }
 }
 ?>
 

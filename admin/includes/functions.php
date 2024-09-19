@@ -8,7 +8,7 @@ function createUser($firstName, $lastName, $email, $phone, $password) {
     try {
         $pdo = getDB();
         $stmt = $pdo->prepare("INSERT INTO users (first_name, last_name, email, phone, password) VALUES (?, ?, ?, ?, ?)");
-        return $stmt->execute([$firstName, $lastName, $email, $phone, md5($password)]);
+        return $stmt->execute([$firstName, $lastName, $email, $phone, $password]);
     } catch (PDOException $e) {
         $response['error'] = $e->getMessage();
         return json_encode($response);

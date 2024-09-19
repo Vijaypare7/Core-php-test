@@ -18,16 +18,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $lastName = trim($_POST['last_name']);
     $email = trim($_POST['email']);
     $phone = trim($_POST['phone']);
-    $password = $_POST['password'];
 
     $errors = validateUserInput($firstName, $lastName, $email, $phone);
 
     if (isset($_POST['auto_generate_password']) && $_POST['auto_generate_password']) {
-        $password = generatePassword();
+        $password = $_POST['generated_password'];
+    }else{
+        $password = $_POST['password'];
     }
 
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
     if (empty($errors)) {
-        $data = createUser($firstName, $lastName, $email, $phone, $password);
+        $data = createUser($firstName, $lastName, $email, $phone, $hashedPassword);
         if(is_string($data)){
             $res = json_decode($data);
             $errors[] = $res->error;

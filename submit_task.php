@@ -79,11 +79,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <label for="description">Description</label>
             <textarea id="description" name="description" class="form-control" rows="5" required></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Submit Task</button>
+        <button type="submit" class="btn btn-primary" onclick="validateForm(event)">Submit Task</button>
     </form>
 </div>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+function validateForm(event) {
+    const startTime = document.getElementById('start_time').value;
+    const stopTime = document.getElementById('stop_time').value;
+
+    if (new Date(stopTime) < new Date(startTime)) {
+        alert('Stop Time must be greater than Start Time.');
+        event.preventDefault();
+    }
+}
+</script>
 </body>
 </html>

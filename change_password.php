@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $newPassword = $_POST['new_password'];
     $userId = $_SESSION['user_id'];
 
-    $hashedPassword = md5($newPassword);
+    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
     $stmt = $pdo->prepare('UPDATE users SET password = :password, last_password_change = NOW(), is_password_default = 0 WHERE id = :id');
     $stmt->execute([
