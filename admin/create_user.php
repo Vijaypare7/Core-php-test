@@ -1,17 +1,5 @@
 <?php
-
-session_start();
-
-require_once 'includes/db.php';
-require_once 'includes/functions.php';
-
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header('Location: login.php');
-    exit;
-}
-
-$errors = [];
-$message = '';
+include('header.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $firstName = trim($_POST['first_name']);
@@ -40,84 +28,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create User</title>
 
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .form-container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-        .input-group .input-group-append {
-            cursor: pointer;
-        }
-    </style>
-    <script>
-        function togglePasswordGeneration() {
-            var checkbox = document.getElementById('auto_generate_password');
-            var passwordField = document.getElementById('password');
-            var password = document.getElementById('generated_password');
-
-            if (checkbox.checked) {
-                // Generate password
-                var generatedPassword = generatePassword();
-                passwordField.value = generatedPassword;
-                passwordField.disabled = true;
-                password.value = generatedPassword; 
-            } else {
-                passwordField.disabled = false;
-                passwordField.value = '';
-                password.value = '';
-            }
-        }
-
-        function generatePassword() {
-            var length = 12;
-            var charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
-            var retVal = "";
-            for (var i = 0, n = charset.length; i < length; ++i) {
-                retVal += charset.charAt(Math.floor(Math.random() * n));
-            }
-            return retVal;
-        }
-
-        function togglePasswordVisibility() {
-            var passwordField = document.getElementById('password');
-            var eyeIcon = document.getElementById('eye-icon');
-
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                eyeIcon.classList.remove('fa-eye');
-                eyeIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                eyeIcon.classList.remove('fa-eye-slash');
-                eyeIcon.classList.add('fa-eye');
-            }
-        }
-    </script>
-</head>
 <body>
-    <div class="form-container">
+    <div class="container">
         <div class="row">
             <div class="col-md-8">
                 <h1>Create User</h1>
-            </div>
-            <div class="col-md-4">
-                <a href="index.php" class="btn btn-secondary mt-3">Back to Dashboard</a>
             </div>
         </div>
 
@@ -172,9 +88,51 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
 
     </div>
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+
+<?php 
+include('footer.php');
+?>
+<script>
+    function togglePasswordGeneration() {
+        var checkbox = document.getElementById('auto_generate_password');
+        var passwordField = document.getElementById('password');
+        var password = document.getElementById('generated_password');
+
+        if (checkbox.checked) {
+            // Generate password
+            var generatedPassword = generatePassword();
+            passwordField.value = generatedPassword;
+            passwordField.disabled = true;
+            password.value = generatedPassword; 
+        } else {
+            passwordField.disabled = false;
+            passwordField.value = '';
+            password.value = '';
+        }
+    }
+
+    function generatePassword() {
+        var length = 12;
+        var charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+        var retVal = "";
+        for (var i = 0, n = charset.length; i < length; ++i) {
+            retVal += charset.charAt(Math.floor(Math.random() * n));
+        }
+        return retVal;
+    }
+
+    function togglePasswordVisibility() {
+        var passwordField = document.getElementById('password');
+        var eyeIcon = document.getElementById('eye-icon');
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordField.type = 'password';
+            eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
+        }
+    }
+</script>

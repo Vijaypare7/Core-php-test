@@ -1,11 +1,5 @@
 <?php
-session_start();
-require 'admin/includes/db.php';
-$pdo = getDB();
-
-if (!isset($_SESSION['user_id'])) {
-    die('You need to be logged in to submit tasks.');
-}
+include('header.php');
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $start_time = $_POST['start_time'];
@@ -37,23 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submit Task</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+
 
 <div class="container mt-5">
     <h2>Submit Task</h2>
-    <br/>
-    <div class="row">
-        <div class="col-md-10"><a href="dashboard.php" class="btn btn-success">Dashboard</a></div>
-        <div class="col-md-2"><a href="logout.php" class="btn btn-danger">Logout</a></div>
-    </div>
     <br/>
 
     <?php if (isset($error)): ?>
@@ -82,9 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <button type="submit" class="btn btn-primary" onclick="validateForm(event)">Submit Task</button>
     </form>
 </div>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 <script>
 function validateForm(event) {
     const startTime = document.getElementById('start_time').value;
@@ -96,5 +75,6 @@ function validateForm(event) {
     }
 }
 </script>
-</body>
-</html>
+<?php
+include('admin/footer.php');
+?>

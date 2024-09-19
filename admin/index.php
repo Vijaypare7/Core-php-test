@@ -1,46 +1,36 @@
 <?php
-
-session_start();
-if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-    header('Location: login.php');
-    exit;
-}
-
-require 'includes/db.php';
-$pdo = getDB();
-
+include('header.php');
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .dashboard-container {
-            max-width: 800px;
-            margin: 50px auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        }
-    </style>
-</head>
 <body>
-    <div class="dashboard-container">
-        <h1 class="text-center">Welcome Admin</h1>
-        <div class="text-center mt-4">
-            <a href="download_report.php" class="btn btn-warning">Download Task Report</a>
-            <a href="create_user.php" class="btn btn-success">Create User</a>
-            <a href="users.php" class="btn btn-primary">User list</a>
-            <a href="logout.php" class="btn btn-danger">Logout</a>
+
+    <?php
+    $stmt = $pdo->prepare('SELECT count(*) AS total FROM users ');
+    $stmt->execute();
+    $users = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    $stmt = $pdo->prepare('SELECT count(*)  AS total FROM tasks ');
+    $stmt->execute();
+    $tasks = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    ?>
+
+    <div class="container">
+    <h1 class="">Dashboard</h1>
+        <div class="card-deck">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Users <p class="card-text text-center"><?php echo $users['total']; ?></p></h5>
+                    
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Total Tasks <p class="card-text text-center"><?php echo $tasks['total']; ?></p></h5>
+                </div>
+            </div>
         </div>
+    </div>
+
     </div>
     <?php
     $stmt = $pdo->prepare('
@@ -53,8 +43,8 @@ $pdo = getDB();
     ?>
     
     <div class="container" style="background-color: aliceblue;">
-    <h2 class="text-center">Task List</h2>
-        <table class="table">
+    <h2 class="">Task List</h2>
+        <table id="tasksTable" class="table table-striped" style="width:100%">
             <thead class="thead-dark">
                 <tr>
                 <th scope="col">#</th>
@@ -86,11 +76,17 @@ $pdo = getDB();
                 ?>
             </tbody>
         </table>
-
     </div>
+<script>
+    new DataTable('#tasksTable');
+</script>
+
+<?php 
+include('footer.php');
+?>
     <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
-</html>
+</html> -->
